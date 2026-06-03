@@ -278,7 +278,7 @@ function rawTsType(schema: SchemaObject, options: Options, openApi: OpenAPIObjec
     const properties = schema.properties || {};
     const required = schema.required;
 
-    const discriminatorProp = schema.discriminator?.propertyName;
+    const discriminatorProp = schema.discriminator?.propertyName || container?.schema?.discriminator?.propertyName;
 
     const emittedDiscriminators = new Set<string>();
     for (const baseSchema of allOf) {
@@ -297,7 +297,7 @@ function rawTsType(schema: SchemaObject, options: Options, openApi: OpenAPIObjec
       if (!property) {
         continue;
       }
-      if (propName === discriminatorProp){
+      if (propName === discriminatorProp || emittedDiscriminators.has(propName)){
         continue;
       }
       if ((property as SchemaObject).description) {
